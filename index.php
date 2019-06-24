@@ -1,8 +1,8 @@
 <?php
-require_once "db.php";
-$db = db::getInstancia("localhost","root","","baseDeDatos");
-$result = $db -> dameQuery("SELECT * FROM clientes");
-while($cliente = mysql_fetch_array($result)){
-  echo $cliente['nombre']." ".$cliente['apellidos']." ".$cliente['email'];
+require_once "model/Connection.php";
+$connection = Connection::getInstance("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas");
+$result = $connection->getQuery("SELECT mes,sum(consultas) as cantidad FROM consumo_interoperabilidad where anio=" . date("Y") . " group by mes");
+// var_dump($result);
+while ($cliente = mysqli_fetch_array($result)) {
+	echo $cliente['mes'] . " " . $cliente['cantidad'];
 }
-?>

@@ -1,3 +1,19 @@
+function prueba() {	
+	console.log('Hola');
+	$.ajax({
+		async: true,
+		data: { oper: 'consultaConsumo' },
+		url: "controller/obtenerDatos.php",
+		success: function (data) {
+			console.log(data);
+			var result =JSON.parse(data);
+			console.log(result);
+		},
+		type: 'POST'
+	});
+
+}
+
 function obtenerDatos(tipo, valor, id) {
 	if (window.XMLHttpRequest) {
 		// code for IE7+, Firefox, Chrome, Opera, Safari
