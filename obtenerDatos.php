@@ -2,10 +2,13 @@
 $tipoConsulta = $_GET['tipo'];
 $valorConsulta = $_GET['valor'];
 require 'conexion.php';
+require_once 'Conexion.php';
 switch ($tipoConsulta) {
 	case "consumoActualPlataformas":
 		$sql="SELECT mes,sum(consultas) as cantidad FROM consumo_interoperabilidad where anio=".date("Y")." group by mes";  
-		$datosBDD=obtenerConsulta("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas",$sql);			
+		//$datosBDD=obtenerConsulta("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas",$sql);			
+		$datosBDD=Conexion->getData("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas");//("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas",$sql);			
+		var_dump($datosBDD);
 		if (count($datosBDD)>0){
 			$instituciones="¬~ENE||163393~FEB||159063~MAR||137184~ABR||103915~MAY||135926~JUN||79195¬";
 			$mes="";
@@ -69,7 +72,7 @@ switch ($tipoConsulta) {
 		}else{
 			$instituciones="";
 		}
-		print	$instituciones;
+		//print	$instituciones;
 		break;
 	case "fuentes":
 		$sql="SELECT nombre, fecha_registra FROM institucion_fuente ORDER BY 2 ASC";  
