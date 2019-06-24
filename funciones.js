@@ -1,17 +1,14 @@
-function prueba() {	
-	console.log('Hola');
+function prueba() {
 	$.ajax({
 		async: true,
 		data: { oper: 'consultaConsumo' },
 		url: "controller/obtenerDatos.php",
 		success: function (data) {
-			console.log(data);
-			var result =JSON.parse(data);
+			var result = JSON.parse(data);
 			console.log(result);
 		},
 		type: 'POST'
 	});
-
 }
 
 function obtenerDatos(tipo, valor, id) {

@@ -26,7 +26,7 @@ function ejecutarConsulta($consulta){
 		$resultado=true;
 	}
 	$conexBDD->close();
-	return $resultado;
+	return $resultado;	
 }
 
 
