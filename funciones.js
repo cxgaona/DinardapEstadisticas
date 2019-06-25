@@ -1,105 +1,90 @@
+function mesString(mesesNumeros) {
+	var meses = []
+	$.each(mesesNumeros, function (index, value) {
+		console.log(value);
+		switch (value) {
+			case "1":
+				meses.push("ENE")
+				break;
+			case "2":
+				meses.push("FEB")
+				break;
+			case "3":
+				meses.push("MAR")
+				break;
+			case "4":
+				meses.push("ABR")
+				break;
+			case "5":
+				meses.push("MAY")
+				break;
+			case "6":
+				meses.push("JUN")
+				break;
+			case "7":
+				meses.push("JUL")
+				break;
+			case "8":
+				meses.push("AGO")
+				break;
+			case "9":
+				meses.push("SEP")
+				break;
+			case "10":
+				meses.push("OCT")
+				break;
+			case "11":
+				meses.push("NOV")
+				break;
+			case "12":
+				meses.push("DIC")
+				break;
+		}
+	})
+	console.log(meses);
+	return meses;
+}
+
 function prueba() {
+	var datos
 	$.ajax({
-		async: true,
+		async: false,
 		data: { oper: 'consultaConsumo' },
 		url: "controller/obtenerDatos.php",
 		success: function (data) {
-			var result = JSON.parse(data);
-			console.log(result);
+			datos = JSON.parse(data)
 		},
 		type: 'POST'
-	});
-}
+	})
 
-function obtenerDatos(tipo, valor, id) {
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} else { // code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange = function () {
-		if (this.readyState == 4 && this.status == 200) {
-			respuesta = this.responseText;
-			//console.log(respuesta);
-			switch (tipo) {
-				case "consumoActualPlataformas":
-					obtenerConsumoActualPlataformas(respuesta);
-					break;
-				case "fuentesAño":
-					obtenerFuentesAño(respuesta);
-					break;
-				case "consumidoresAño":
-					obtenerConsumidoresAño(respuesta);
-					break;
-				case "camposIntegradosAño":
-					obtenerCamposIntegradosAño(respuesta);
-					break;
-				case "accesoFichaSimplificada":
-					obtenerAccesoFichaSimplificada(respuesta);
-					break;
-				case "accesoInteroperabilidad":
-					obtenerAccesoInteroperabilidad(respuesta);
-					break;
-				case "accesoInfoDigital":
-					obtenerAccesoInfoDigital(respuesta);
-					break;
-				case "consumidores":
-					obtenerConsumidores(respuesta);
-					break;
-				case "fuentes":
-					obtenerFuentes(respuesta);
-					break;
-			}
-		}
-	}
-	xmlhttp.open("GET", "obtenerDatos.php?tipo=" + tipo + "&valor=" + valor, true);
-	xmlhttp.send();
-}
-
-function obtenerConsumoActualPlataformas(respuesta) {
-	var plataformasA = respuesta.split("¬");
-
-	var datosFicha = plataformasA[1].split("~");
-	var mesesFicha = [];
-	var cantidadFicha = [];
-	for (var i = 1; i < datosFicha.length; i++) {
-		var registros = datosFicha[i].split("||");
-		mesesFicha.push(registros[0]);
-		cantidadFicha.push(registros[1]);
-	}
-	var datosInteroperabilidad = plataformasA[2].split("~");
-	var mesesInteroperabilidad = [];
-	var cantidadInteroperabilidad = [];
-	for (var i = 1; i < datosInteroperabilidad.length; i++) {
-		var registros = datosInteroperabilidad[i].split("||");
-		mesesInteroperabilidad.push(registros[0]);
-		cantidadInteroperabilidad.push(registros[1]);
-	}
-	var datosInfoDigital = plataformasA[3].split("~");
-	var mesesInfoDigital = [];
-	var cantidadInfoDigital = [];
-	for (var i = 1; i < datosInfoDigital.length; i++) {
-		var registros = datosInfoDigital[i].split("||");
-		mesesInfoDigital.push(registros[0]);
-		cantidadInfoDigital.push(registros[1]);
-	}
 	var ctx = document.getElementById('consumoActualPlataformas').getContext("2d");
-
 	var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
 	gradientStroke.addColorStop(0, '#80b6f4');
 	gradientStroke.addColorStop(1, chartColor);
-
 	var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
 	gradientFill.addColorStop(0, "rgba(255, 255, 255, 0)");
 	gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
+	var cantidades = []
+	var meses = []
+	$.each(datos, function (index, value) {
+		$.each(value, function (key, value) {
+			if (key === "cantidad")
+				cantidades.push(value)
+			if (key === "mes")
+				meses.push(value)
+		});
+	});
+
+
+
+
 
 	var myChart = new Chart(ctx, {
 		type: 'line',
 		data: {
-			labels: mesesInteroperabilidad,
+			labels: mesString(meses),
 			datasets: [{
-				label: "Interoperabilidad",
+				label: "Prueba",
 				borderColor: "#3366cc",
 				pointBorderColor: "#3366cc",
 				pointBackgroundColor: "#3366cc",
@@ -112,41 +97,8 @@ function obtenerConsumoActualPlataformas(respuesta) {
 				fill: false,
 				backgroundColor: gradientFill,
 				borderWidth: 2,
-				data: cantidadInteroperabilidad
+				data: cantidades
 			},
-			{
-				label: "FichaSimplificada",
-				borderColor: "#dc3912",
-				pointBorderColor: "#dc3912",
-				pointBackgroundColor: "#dc3912",
-				pointHoverBackgroundColor: "#fb8a0b",
-				pointHoverBorderColor: chartColor,
-				pointBorderWidth: 1,
-				pointHoverRadius: 7,
-				pointHoverBorderWidth: 2,
-				pointRadius: 5,
-				fill: false,
-				backgroundColor: gradientFill,
-				borderWidth: 2,
-				data: cantidadFicha
-			},
-			{
-				label: "Info Digital",
-				borderColor: "#909",
-				pointBorderColor: "#909",
-				pointBackgroundColor: "#909",
-				pointHoverBackgroundColor: "#ea19d9",
-				pointHoverBorderColor: chartColor,
-				pointBorderWidth: 1,
-				pointHoverRadius: 7,
-				pointHoverBorderWidth: 2,
-				pointRadius: 5,
-				fill: false,
-				backgroundColor: gradientFill,
-				borderWidth: 2,
-				data: cantidadInfoDigital
-			}
-
 			]
 		},
 		options: {
@@ -208,7 +160,221 @@ function obtenerConsumoActualPlataformas(respuesta) {
 			}
 		}
 	});
+
+
+
+
+
+	// function obtenerConsumoActualPlataformas(respuesta) {
+	// 	
+	// 	
+
+	// 	
+	// }
+
+
+
 }
+
+function obtenerDatos(tipo, valor, id) {
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else { // code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			respuesta = this.responseText;
+			//console.log(respuesta);
+			switch (tipo) {
+				case "consumoActualPlataformas":
+					// obtenerConsumoActualPlataformas(respuesta);
+					console.log("Sig Función");
+					break;
+				case "fuentesAño":
+					obtenerFuentesAño(respuesta);
+					break;
+				case "consumidoresAño":
+					obtenerConsumidoresAño(respuesta);
+					break;
+				case "camposIntegradosAño":
+					obtenerCamposIntegradosAño(respuesta);
+					break;
+				case "accesoFichaSimplificada":
+					obtenerAccesoFichaSimplificada(respuesta);
+					break;
+				case "accesoInteroperabilidad":
+					obtenerAccesoInteroperabilidad(respuesta);
+					break;
+				case "accesoInfoDigital":
+					obtenerAccesoInfoDigital(respuesta);
+					break;
+				case "consumidores":
+					obtenerConsumidores(respuesta);
+					break;
+				case "fuentes":
+					obtenerFuentes(respuesta);
+					break;
+			}
+		}
+	}
+	xmlhttp.open("GET", "obtenerDatos.php?tipo=" + tipo + "&valor=" + valor, true);
+	xmlhttp.send();
+}
+
+// function obtenerConsumoActualPlataformas(respuesta) {
+// 	var plataformasA = respuesta.split("¬");
+
+// 	var datosFicha = plataformasA[1].split("~");
+// 	var mesesFicha = [];
+// 	var cantidadFicha = [];
+// 	for (var i = 1; i < datosFicha.length; i++) {
+// 		var registros = datosFicha[i].split("||");
+// 		mesesFicha.push(registros[0]);
+// 		cantidadFicha.push(registros[1]);
+// 	}
+// 	var datosInteroperabilidad = plataformasA[2].split("~");
+// 	var mesesInteroperabilidad = [];
+// 	var cantidadInteroperabilidad = [];
+// 	for (var i = 1; i < datosInteroperabilidad.length; i++) {
+// 		var registros = datosInteroperabilidad[i].split("||");
+// 		mesesInteroperabilidad.push(registros[0]);
+// 		cantidadInteroperabilidad.push(registros[1]);
+// 	}
+// 	var datosInfoDigital = plataformasA[3].split("~");
+// 	var mesesInfoDigital = [];
+// 	var cantidadInfoDigital = [];
+// 	for (var i = 1; i < datosInfoDigital.length; i++) {
+// 		var registros = datosInfoDigital[i].split("||");
+// 		mesesInfoDigital.push(registros[0]);
+// 		cantidadInfoDigital.push(registros[1]);
+// 	}
+// 	var ctx = document.getElementById('consumoActualPlataformas').getContext("2d");
+
+// 	var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+// 	gradientStroke.addColorStop(0, '#80b6f4');
+// 	gradientStroke.addColorStop(1, chartColor);
+
+// 	var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
+// 	gradientFill.addColorStop(0, "rgba(255, 255, 255, 0)");
+// 	gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
+
+// 	var myChart = new Chart(ctx, {
+// 		type: 'line',
+// 		data: {
+// 			labels: mesesInteroperabilidad,
+// 			datasets: [{
+// 				label: "Interoperabilidad",
+// 				borderColor: "#3366cc",
+// 				pointBorderColor: "#3366cc",
+// 				pointBackgroundColor: "#3366cc",
+// 				pointHoverBackgroundColor: "blue",
+// 				pointHoverBorderColor: chartColor,
+// 				pointBorderWidth: 1,
+// 				pointHoverRadius: 7,
+// 				pointHoverBorderWidth: 2,
+// 				pointRadius: 5,
+// 				fill: false,
+// 				backgroundColor: gradientFill,
+// 				borderWidth: 2,
+// 				data: cantidadInteroperabilidad
+// 			},
+// 			{
+// 				label: "FichaSimplificada",
+// 				borderColor: "#dc3912",
+// 				pointBorderColor: "#dc3912",
+// 				pointBackgroundColor: "#dc3912",
+// 				pointHoverBackgroundColor: "#fb8a0b",
+// 				pointHoverBorderColor: chartColor,
+// 				pointBorderWidth: 1,
+// 				pointHoverRadius: 7,
+// 				pointHoverBorderWidth: 2,
+// 				pointRadius: 5,
+// 				fill: false,
+// 				backgroundColor: gradientFill,
+// 				borderWidth: 2,
+// 				data: cantidadFicha
+// 			},
+// 			{
+// 				label: "Info Digital",
+// 				borderColor: "#909",
+// 				pointBorderColor: "#909",
+// 				pointBackgroundColor: "#909",
+// 				pointHoverBackgroundColor: "#ea19d9",
+// 				pointHoverBorderColor: chartColor,
+// 				pointBorderWidth: 1,
+// 				pointHoverRadius: 7,
+// 				pointHoverBorderWidth: 2,
+// 				pointRadius: 5,
+// 				fill: false,
+// 				backgroundColor: gradientFill,
+// 				borderWidth: 2,
+// 				data: cantidadInfoDigital
+// 			}
+
+// 			]
+// 		},
+// 		options: {
+// 			responsive: true,
+// 			layout: {
+// 				padding: {
+// 					left: 20,
+// 					right: 20,
+// 					top: 0,
+// 					bottom: 0
+// 				}
+// 			},
+// 			maintainAspectRatio: false,
+// 			tooltips: {
+// 				backgroundColor: '#fff',
+// 				titleFontColor: '#333',
+// 				bodyFontColor: '#666',
+// 				bodySpacing: 4,
+// 				xPadding: 12,
+// 				mode: "nearest",
+// 				intersect: 0,
+// 				position: "nearest"
+// 			},
+// 			legend: {
+// 				position: "bottom",
+// 				fillStyle: "#FFF",
+// 				display: true
+// 			},
+// 			scales: {
+// 				yAxes: [{
+// 					ticks: {
+// 						fontColor: "#686262",
+// 						fontStyle: "bold",
+// 						beginAtZero: true,
+// 						maxTicksLimit: 5,
+// 						padding: 10
+// 					},
+// 					gridLines: {
+// 						drawTicks: true,
+// 						drawBorder: false,
+// 						display: true,
+// 						color: "#d1cbcb",
+// 						zeroLineColor: "transparent"
+// 					}
+
+// 				}],
+// 				xAxes: [{
+// 					gridLines: {
+// 						zeroLineColor: "transparent",
+// 						display: false,
+
+// 					},
+// 					ticks: {
+// 						padding: 10,
+// 						fontColor: "#686262",
+// 						fontStyle: "bold"
+// 					}
+// 				}]
+// 			}
+// 		}
+// 	});
+// }
 
 function obtenerConsumidoresAño(respuesta) {
 	var datos = respuesta.split("~");

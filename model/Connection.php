@@ -18,7 +18,7 @@ class Connection
 
   private function connect()
   {
-    $this->conecction = @new mysqli($this->server, $this->user, $this->password);
+    $this->conecction = @new mysqli($this->server, $this->user, $this->password);    
     if ($this->conecction->connect_errno) {
       die('Error de conexión: ' . $this->conecction->connect_error);     
       $this->disconnect(); 

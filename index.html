@@ -342,22 +342,29 @@
 <script src="assets/js/now-ui-dashboard.js?v=1.0.1"></script>
 <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
 <script src="assets/demo/demo.js"></script>
-<script src="funciones.js"></script>
+<script src="controller/estadisticasInicio.js"></script>
 <script>
     $(document).ready(function () {
-        // Javascript method's body can be found in assets/js/demos.js
+        
         demo.initDashboardPageCharts();
         // obtener datos de consumidores y fuentes de la bdd
-        prueba();
-        obtenerDatos("consumoActualPlataformas");
+        consultaConsumo();
+        fuentes();
+        consumidores();
+        fuentesAño();
+        consumidoresAño();
+        camposIntegradosAño();
+        accesoInteroperabilidad();
+        accesoInfoDigital();
+        accesoFichaSimplificada();
+        /*obtenerDatos("consumoActualPlataformas");
         obtenerDatos("fuentesAño");
         obtenerDatos("consumidoresAño");
         obtenerDatos("camposIntegradosAño");
         obtenerDatos("accesoFichaSimplificada");
         obtenerDatos("accesoInteroperabilidad");
         obtenerDatos("accesoInfoDigital");
-        obtenerDatos("consumidores");
-        obtenerDatos("fuentes");
+        */
     });    
 </script>
 
