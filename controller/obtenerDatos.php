@@ -169,7 +169,7 @@ if (isset($_POST['oper'])) {
 			FROM informacion WHERE EXTRACT(YEAR FROM fecha_creacion_informacionpriv)<=2018 UNION
 			SELECT '2019' as anio, COUNT(DISTINCT(id_institucion_privada)) AS cantidad
 			FROM informacion WHERE EXTRACT(YEAR FROM fecha_creacion_informacionpriv)<=2019";
-			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
+			$connection = Connection::getInstance("192.168.149.3", "bckdba_dinar", "sERVIDOR.20", "sinardap");
 			$result = $connection->getQuery($sql);
 			$i = 0;
 			while ($row = mysqli_fetch_array($result)) {
