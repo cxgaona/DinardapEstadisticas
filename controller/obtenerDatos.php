@@ -179,5 +179,4 @@ if (isset($_POST['oper'])) {
 			echo json_encode($rawdata);
 			break;
 	}
-	
 }
