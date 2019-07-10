@@ -198,7 +198,7 @@ if (isset($_POST['oper'])) {
 			WHERE F.INSF_ID =" . $_POST['fuente'] . "
 		  AND CONS_FECHA BETWEEN '" . $_POST['fechaInicio'] . "' AND '" . $_POST['fechaFin'] . "'
 			GROUP BY CON.INSC_ID , YEAR(CONS_FECHA);";
-			$connection = Connection::getInstance("localhost", "root", "", "consumo");
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
 			$result = $connection->getQuery($sql);
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($result)) {				
@@ -206,7 +206,12 @@ if (isset($_POST['oper'])) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
-			echo json_encode($rawdata);
+			if(!empty($rawdata)){
+				echo json_encode($rawdata);
+			}else{
+				echo "0";	
+			}
+			
 			// require "generarExcel.php";				
 			break;
 		case "loadFuentes":
@@ -214,7 +219,7 @@ if (isset($_POST['oper'])) {
 			INSF_ID AS 'INSTITUCION FUENTE ID', 
 			INSF_NOMBRE AS 'INSTITUCION FUENTE'
 			FROM INSTITUCION_FUENTE";
-			$connection = Connection::getInstance("localhost", "root", "", "consumo");
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
 			$result = $connection->getQuery($sql);
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($result)) {

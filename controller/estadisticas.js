@@ -52,49 +52,24 @@ function descargarReporteExcel() {
       fuente: idFuenteSeleccionada
     },
     url: "controller/obtenerDatos.php",
-    success: function (data) {      
-      datos = JSON.parse(data)
-      var rows = []
-      var columns = []
-      $.each(datos, function (index, value) {
-        columns = Object.keys(value)        
-      });
-      rows.push(columns)      
-      columns = []
-      $.each(datos, function (index, value) {        
-        columns.push(value['INSTITUCION CONSUMIDORA'])
-        columns.push(value['AÑO'])
-        columns.push(value['ENE'])
-        columns.push(value['FEB'])
-        columns.push(value['MAR'])
-        columns.push(value['ABR'])
-        columns.push(value['MAY'])
-        columns.push(value['JUN'])
-        columns.push(value['JUL'])
-        columns.push(value['AGO'])
-        columns.push(value['SEP'])
-        columns.push(value['OCT'])
-        columns.push(value['NOV'])
-        columns.push(value['DIC'])
-        rows.push(columns)
-        columns = []
-      })
-      
-
-
-      var wb = XLSX.utils.book_new();
-      wb.Props = {
-        Title: "SheetJS Tutorial",
-        Subject: "Test",
-        Author: "Red Stapler",
-        CreatedDate: new Date(2017, 12, 19)
-      };
-      wb.SheetNames.push("Test Sheet");
-      var ws_data = rows;
-      var ws = XLSX.utils.aoa_to_sheet(ws_data);
-      wb.Sheets["Test Sheet"] = ws;
-      var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-      XLSX.writeFile(wb, 'ReporteFuenteConsumidores ' + fechaInicial + ' a ' + fechaFinal + '.xlsx');
+    success: function (data) {
+      if(data!="0"){
+        datos = JSON.parse(data)         
+        var wb = XLSX.utils.book_new();
+        wb.Props = {
+          Title: "Reporte Fuente Consumidores",
+          Subject: "",
+          Author: "DINARDAP",
+          CreatedDate: new Date()
+        };
+        wb.SheetNames.push("Reporte Fuente Consumidores");
+        var ws = XLSX.utils.json_to_sheet(datos);
+        wb.Sheets["Reporte Fuente Consumidores"] = ws;
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+        XLSX.writeFile(wb, 'ReporteFuenteConsumidores ' + fechaInicial + ' a ' + fechaFinal + '.xlsx');
+      }else{
+        alert("No existen datos para la Fuente y Fechas Seleccionadas");
+      }
     },
     type: 'POST'
   })
