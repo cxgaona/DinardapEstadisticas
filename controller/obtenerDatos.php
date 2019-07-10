@@ -8,7 +8,7 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -61,9 +61,8 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$row["nombre"] = utf8_encode($row["nombre"]);
-				$row[0] = utf8_encode($row[0]);
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -74,9 +73,8 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$row["nombre"] = utf8_encode($row["nombre"]);
-				$row[0] = utf8_encode($row[0]);
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -87,7 +85,7 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -98,7 +96,7 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -109,7 +107,7 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -129,7 +127,7 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.15", "bckdba_dinar", "sERVIDOR.20", "interoperador");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -172,7 +170,55 @@ if (isset($_POST['oper'])) {
 			$connection = Connection::getInstance("192.168.149.3", "bckdba_dinar", "sERVIDOR.20", "sinardap");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_array($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				$rawdata[$i] = $row;
+				$i++;
+			}
+			echo json_encode($rawdata);
+			break;
+		case "cargaExcel":
+			$sql = "SELECT 			
+			INSC_NOMBRE AS 'INSTITUCION CONSUMIDORA',
+			YEAR(CONS_FECHA) AS 'AÑO',    
+			sum(CASE WHEN MONTH(CONS_FECHA)=1 THEN CONS_CANTIDAD END) 'ENE',
+			sum(CASE WHEN MONTH(CONS_FECHA)=2 THEN CONS_CANTIDAD END) 'FEB',
+			sum(CASE WHEN MONTH(CONS_FECHA)=3 THEN CONS_CANTIDAD END) 'MAR',
+			sum(CASE WHEN MONTH(CONS_FECHA)=4 THEN CONS_CANTIDAD END) 'ABR',
+			sum(CASE WHEN MONTH(CONS_FECHA)=5 THEN CONS_CANTIDAD END) 'MAY',
+			sum(CASE WHEN MONTH(CONS_FECHA)=6 THEN CONS_CANTIDAD END) 'JUN',
+			sum(CASE WHEN MONTH(CONS_FECHA)=7 THEN CONS_CANTIDAD END) 'JUL',
+			sum(CASE WHEN MONTH(CONS_FECHA)=8 THEN CONS_CANTIDAD END) 'AGO',
+			sum(CASE WHEN MONTH(CONS_FECHA)=9 THEN CONS_CANTIDAD END) 'SEP',
+			sum(CASE WHEN MONTH(CONS_FECHA)=10 THEN CONS_CANTIDAD END) 'OCT',
+			sum(CASE WHEN MONTH(CONS_FECHA)=11 THEN CONS_CANTIDAD END) 'NOV',
+			sum(CASE WHEN MONTH(CONS_FECHA)=12 THEN CONS_CANTIDAD END) 'DIC'
+			FROM consumos CON
+			LEFT JOIN institucion_consumidora C ON CON.INSC_ID=C.INSC_ID
+			LEFT JOIN institucion_fuente F ON CON.INSF_ID=F.INSF_ID 
+			WHERE F.INSF_ID =" . $_POST['fuente'] . "
+		  AND CONS_FECHA BETWEEN '" . $_POST['fechaInicio'] . "' AND '" . $_POST['fechaFin'] . "'
+			GROUP BY CON.INSC_ID , YEAR(CONS_FECHA);";
+			$connection = Connection::getInstance("localhost", "root", "", "consumo");
+			$result = $connection->getQuery($sql);
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($result)) {				
+				$row["INSTITUCION CONSUMIDORA"] = utf8_encode($row["INSTITUCION CONSUMIDORA"]);
+				$rawdata[$i] = $row;
+				$i++;
+			}
+			echo json_encode($rawdata);
+			// require "generarExcel.php";				
+			break;
+		case "loadFuentes":
+			$sql = "SELECT 
+			INSF_ID AS 'INSTITUCION FUENTE ID', 
+			INSF_NOMBRE AS 'INSTITUCION FUENTE'
+			FROM INSTITUCION_FUENTE";
+			$connection = Connection::getInstance("localhost", "root", "", "consumo");
+			$result = $connection->getQuery($sql);
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($result)) {
+				$row["INSTITUCION FUENTE"] = utf8_encode($row["INSTITUCION FUENTE"]);
 				$rawdata[$i] = $row;
 				$i++;
 			}
