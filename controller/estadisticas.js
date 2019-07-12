@@ -17,8 +17,7 @@ function loadFuentes() {
     data: { oper: 'loadFuentes' },
     url: "controller/obtenerDatos.php",
     success: function (data) {
-      fuentes = JSON.parse(data)
-      
+      fuentes = JSON.parse(data)      
     },
     type: 'POST'
   })
@@ -53,10 +52,13 @@ function descargarReporteExcel() {
     },
     url: "controller/obtenerDatos.php",
     success: function (data) {      
+      console.log("data"+data)
       datos = JSON.parse(data)
+      // console.log("datos"+datos)
+
       var rows = []
       var columns = []
-      $.each(datos, function (index, value) {
+      $.each(datos, function (index, value) {        
         columns = Object.keys(value)        
       });
       rows.push(columns)      
@@ -91,14 +93,11 @@ function descargarReporteExcel() {
       };
       wb.SheetNames.push("Test Sheet");
       var ws_data = rows;
-      var ws = XLSX.utils.aoa_to_sheet(ws_data);
+      var ws = XLSX.utils.json_to_sheet(datos);
       wb.Sheets["Test Sheet"] = ws;
       var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-      XLSX.writeFile(wb, 'ReporteFuenteConsumidores ' + fechaInicial + ' a ' + fechaFinal + '.xlsx');
+      // XLSX.writeFile(wb, 'ReporteFuenteConsumidores ' + fechaInicial + ' a ' + fechaFinal + '.xlsx');
     },
     type: 'POST'
   })
-
-
-
 }

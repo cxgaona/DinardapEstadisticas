@@ -198,23 +198,35 @@ if (isset($_POST['oper'])) {
 			WHERE F.INSF_ID =" . $_POST['fuente'] . "
 		  AND CONS_FECHA BETWEEN '" . $_POST['fechaInicio'] . "' AND '" . $_POST['fechaFin'] . "'
 			GROUP BY CON.INSC_ID , YEAR(CONS_FECHA);";
-			$connection = Connection::getInstance("localhost", "root", "", "consumo");
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
 			$result = $connection->getQuery($sql);
 			$i = 0;
-			while ($row = mysqli_fetch_assoc($result)) {				
+			while ($row = mysqli_fetch_assoc($result)) {
 				$row["INSTITUCION CONSUMIDORA"] = utf8_encode($row["INSTITUCION CONSUMIDORA"]);
+				$row["ENE"] = intval($row["ENE"]);
+				$row["FEB"] = intval($row["FEB"]);
+				$row["MAR"] = intval($row["MAR"]);
+				$row["ABR"] = intval($row["ABR"]);
+				$row["MAY"] = intval($row["MAY"]);
+				$row["JUN"] = intval($row["JUN"]);
+				$row["JUL"] = intval($row["JUL"]);
+				$row["AGO"] = intval($row["AGO"]);
+				$row["SEP"] = intval($row["SEP"]);
+				$row["OCT"] = intval($row["OCT"]);
+				$row["NOV"] = intval($row["NOV"]);
+				$row["DIC"] = intval($row["DIC"]);
 				$rawdata[$i] = $row;
 				$i++;
 			}
-			echo json_encode($rawdata);
-			// require "generarExcel.php";				
+			//var_dump($rawdata);
+			echo json_encode($rawdata);			
 			break;
 		case "loadFuentes":
 			$sql = "SELECT 
 			INSF_ID AS 'INSTITUCION FUENTE ID', 
 			INSF_NOMBRE AS 'INSTITUCION FUENTE'
 			FROM INSTITUCION_FUENTE";
-			$connection = Connection::getInstance("localhost", "root", "", "consumo");
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
 			$result = $connection->getQuery($sql);
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($result)) {
