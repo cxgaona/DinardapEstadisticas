@@ -218,8 +218,11 @@ if (isset($_POST['oper'])) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
-			//var_dump($rawdata);
-			echo json_encode($rawdata);			
+			if(!empty($rawdata)){
+				echo json_encode($rawdata);
+			}else{
+				echo "0";	
+			}							
 			break;
 		case "loadFuentes":
 			$sql = "SELECT 
