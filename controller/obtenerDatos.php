@@ -203,6 +203,18 @@ if (isset($_POST['oper'])) {
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($result)) {				
 				$row["INSTITUCION CONSUMIDORA"] = utf8_encode($row["INSTITUCION CONSUMIDORA"]);
+				$row["ENE"] = intval($row["ENE"]);
+				$row["FEB"] = intval($row["FEB"]);
+				$row["MAR"] = intval($row["MAR"]);
+				$row["ABR"] = intval($row["ABR"]);
+				$row["MAY"] = intval($row["MAY"]);
+				$row["JUN"] = intval($row["JUN"]);
+				$row["JUL"] = intval($row["JUL"]);
+				$row["AGO"] = intval($row["AGO"]);
+				$row["SEP"] = intval($row["SEP"]);
+				$row["OCT"] = intval($row["OCT"]);
+				$row["NOV"] = intval($row["NOV"]);
+				$row["DIC"] = intval($row["DIC"]);
 				$rawdata[$i] = $row;
 				$i++;
 			}
@@ -210,9 +222,7 @@ if (isset($_POST['oper'])) {
 				echo json_encode($rawdata);
 			}else{
 				echo "0";	
-			}
-			
-			// require "generarExcel.php";				
+			}							
 			break;
 		case "loadFuentes":
 			$sql = "SELECT 
