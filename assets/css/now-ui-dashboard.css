@@ -1246,10 +1246,12 @@ p.description {
 
 .category,
 .card-category {
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-weight: 400;
   color: #9A9A9A;
-  font-size: 0.7142em; }
+  font-size: 0.7142em; 
+  margin-bottom: 0px !important
+}
 
 .card-category {
   font-size: 1em; }

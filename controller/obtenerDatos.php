@@ -176,7 +176,38 @@ if (isset($_POST['oper'])) {
 			}
 			echo json_encode($rawdata);
 			break;
-		case "cargaExcel":
+		case "loadFuentes":
+			$sql = "SELECT 
+			INSF_ID AS 'INSTITUCION FUENTE ID', 
+			INSF_NOMBRE AS 'INSTITUCION FUENTE'
+			FROM INSTITUCION_FUENTE";
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
+			$result = $connection->getQuery($sql);
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($result)) {
+				$row["INSTITUCION FUENTE"] = utf8_encode($row["INSTITUCION FUENTE"]);
+				$rawdata[$i] = $row;
+				$i++;
+			}
+			echo json_encode($rawdata);
+			break;
+		case "loadConsumidores":
+			$sql = "SELECT 
+			INSC_ID AS 'INSTITUCION CONSUMIDORA ID', 
+			INSC_RUC AS 'RUC', 
+			INSC_NOMBRE AS 'INSTITUCION CONSUMIDORA'
+			FROM INSTITUCION_CONSUMIDORA";
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
+			$result = $connection->getQuery($sql);
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($result)) {
+				$row["INSTITUCION CONSUMIDORA"] = utf8_encode($row["INSTITUCION CONSUMIDORA"]);
+				$rawdata[$i] = $row;
+				$i++;
+			}
+			echo json_encode($rawdata);
+			break;
+		case "cargaInfoFuenteConsumidor":
 			$sql = "SELECT 			
 			INSC_NOMBRE AS 'INSTITUCION CONSUMIDORA',
 			YEAR(CONS_FECHA) AS 'AÑO',    
@@ -218,26 +249,109 @@ if (isset($_POST['oper'])) {
 				$rawdata[$i] = $row;
 				$i++;
 			}
-			if(!empty($rawdata)){
+			if (!empty($rawdata)) {
 				echo json_encode($rawdata);
-			}else{
-				echo "0";	
-			}							
+			} else {
+				echo "0";
+			}
 			break;
-		case "loadFuentes":
+		case "cargaInfoFuenteConsumidoresCampos":
 			$sql = "SELECT 
-			INSF_ID AS 'INSTITUCION FUENTE ID', 
-			INSF_NOMBRE AS 'INSTITUCION FUENTE'
-			FROM INSTITUCION_FUENTE";
+			CAM_NOMBRE AS 'CAMPO',
+			YEAR(CAMC_FECHA) AS 'AÑO',   
+			sum(CASE WHEN MONTH(CAMC_FECHA)=1 THEN CAMC_CANTIDAD END) 'ENE',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=2 THEN CAMC_CANTIDAD END) 'FEB',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=3 THEN CAMC_CANTIDAD END) 'MAR',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=4 THEN CAMC_CANTIDAD END) 'ABR',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=5 THEN CAMC_CANTIDAD END) 'MAY',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=6 THEN CAMC_CANTIDAD END) 'JUN',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=7 THEN CAMC_CANTIDAD END) 'JUL',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=8 THEN CAMC_CANTIDAD END) 'AGO',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=9 THEN CAMC_CANTIDAD END) 'SEP',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=10 THEN CAMC_CANTIDAD END) 'OCT',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=11 THEN CAMC_CANTIDAD END) 'NOV',
+			sum(CASE WHEN MONTH(CAMC_FECHA)=12 THEN CAMC_CANTIDAD END) 'DIC' 
+			FROM CAMPO_CONSUMO CC 
+			LEFT JOIN institucion_consumidora C ON C.INSC_ID=CC.INSC_ID
+			LEFT JOIN CAMPO K ON K.CAM_ID=CC.CAM_ID
+			LEFT JOIN institucion_fuente F ON F.INSF_ID=K.INSF_ID
+			WHERE K.INSF_ID = " . $_POST['fuente'] . "
+			AND CC.INSC_ID=" . $_POST['consumidor'] . "
+			AND CAMC_FECHA BETWEEN '" . $_POST['fechaInicio'] . "' AND '" . $_POST['fechaFin'] . "'
+			GROUP BY CC.INSC_ID , YEAR(CAMC_FECHA ), CC.CAM_ID";
+			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
+			$result = $connection->getQuery($sql);
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($result)) {
+				$row["CAMPO"] = utf8_encode($row["CAMPO"]);
+				$row["ENE"] = intval($row["ENE"]);
+				$row["FEB"] = intval($row["FEB"]);
+				$row["MAR"] = intval($row["MAR"]);
+				$row["ABR"] = intval($row["ABR"]);
+				$row["MAY"] = intval($row["MAY"]);
+				$row["JUN"] = intval($row["JUN"]);
+				$row["JUL"] = intval($row["JUL"]);
+				$row["AGO"] = intval($row["AGO"]);
+				$row["SEP"] = intval($row["SEP"]);
+				$row["OCT"] = intval($row["OCT"]);
+				$row["NOV"] = intval($row["NOV"]);
+				$row["DIC"] = intval($row["DIC"]);
+				$rawdata[$i] = $row;
+				$i++;
+			}
+			if (!empty($rawdata)) {
+				echo json_encode($rawdata);
+			} else {
+				echo "0";
+			}
+			break;
+		case "cargaInfoConsumidoFuente":
+			$sql = "SELECT 			
+			INSF_NOMBRE AS ' INSTITUCION FUENT E',
+			YEAR(CONS_FECHA) AS  'AÑ O',    
+			sum(CASE WHEN MONTH(CONS_FECHA)=1 THEN CONS_CANTIDAD END)  'EN E',
+			sum(CASE WHEN MONTH(CONS_FECHA)=2 THEN CONS_CANTIDAD END)  'FE B',
+			sum(CASE WHEN MONTH(CONS_FECHA)=3 THEN CONS_CANTIDAD END)  'MA R',
+			sum(CASE WHEN MONTH(CONS_FECHA)=4 THEN CONS_CANTIDAD END)  'AB R',
+			sum(CASE WHEN MONTH(CONS_FECHA)=5 THEN CONS_CANTIDAD END)  'MA Y',
+			sum(CASE WHEN MONTH(CONS_FECHA)=6 THEN CONS_CANTIDAD END)  'JU N',
+			sum(CASE WHEN MONTH(CONS_FECHA)=7 THEN CONS_CANTIDAD END)  'JU L',
+			sum(CASE WHEN MONTH(CONS_FECHA)=8 THEN CONS_CANTIDAD END)  'AG O',
+			sum(CASE WHEN MONTH(CONS_FECHA)=9 THEN CONS_CANTIDAD END)  'SE P',
+			sum(CASE WHEN MONTH(CONS_FECHA)=10 THEN CONS_CANTIDAD END)  'OC T',
+			sum(CASE WHEN MONTH(CONS_FECHA)=11 THEN CONS_CANTIDAD END)  'NO V',
+			sum(CASE WHEN MONTH(CONS_FECHA)=12 THEN CONS_CANTIDAD END)  'DI C'
+			FROM consumos CON
+			LEFT JOIN institucion_consumidora C ON CON.INSC_ID=C.INSC_ID
+			LEFT JOIN institucion_fuente F ON CON.INSF_ID=F.INSF_ID 
+			WHERE C.INSC_ID = " . $_POST['consumido r'] . "
+			AND CONS_FECHA BETWEEN  '" . $_POST['fechaInicio'] .  "' AND  '" . $_POST['fechaFin'] . "'
+			GROUP BY CON.INSF_ID, YEAR(CONS_FECHA)";
 			$connection = Connection::getInstance("10.0.0.106", "cristian.remache", "", "consumo");
 			$result = $connection->getQuery($sql);
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($result)) {
 				$row["INSTITUCION FUENTE"] = utf8_encode($row["INSTITUCION FUENTE"]);
+				$row["ENE"] = intval($row["ENE"]);
+				$row["FEB"] = intval($row["FEB"]);
+				$row["MAR"] = intval($row["MAR"]);
+				$row["ABR"] = intval($row["ABR"]);
+				$row["MAY"] = intval($row["MAY"]);
+				$row["JUN"] = intval($row["JUN"]);
+				$row["JUL"] = intval($row["JUL"]);
+				$row["AGO"] = intval($row["AGO"]);
+				$row["SEP"] = intval($row["SEP"]);
+				$row["OCT"] = intval($row["OCT"]);
+				$row["NOV"] = intval($row["NOV"]);
+				$row["DIC"] = intval($row["DIC"]);
 				$rawdata[$i] = $row;
 				$i++;
 			}
-			echo json_encode($rawdata);
+			if (!empty($rawdata)) {
+				echo json_encode($rawdata);
+			} else {
+				echo "0";
+			}
 			break;
 	}
 }

@@ -128,9 +128,12 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="title">Reporte Fuente Consumidores</h5>
+                                <h5 class="title">Reportes Fuente Consumidores</h5>
                             </div>
                             <div class="card-body">
+                                <h4 class="card-title">
+                                    <p class="category">Listado de Instituciones Consumidoras</p>
+                                </h4>
                                 <form>
                                     <div class="row">
                                         <div class="col-md-4 pl-1">
@@ -143,20 +146,114 @@
                                         <div class="col-md-3 pl-1">
                                             <div class="form-group">
                                                 <label>Fecha Inicial</label>
-                                                <input id="fechaInicialFuenteConsumidor" class="datepicker form-control" type="text"
-                                                    placeholder="2007-01-26" />
+                                                <input id="fechaInicialFuenteConsumidor"
+                                                    class="datepicker form-control fechaInicial" type="text"
+                                                    placeholder="2007-01" />
                                             </div>
                                         </div>
                                         <div class="col-md-3 pl-1">
                                             <div class="form-group">
                                                 <label>Fecha Final</label>
-                                                <input id="fechaFinalFuenteConsumidor" class="datepicker form-control" type="text"
-                                                    placeholder="2017-12-23" />
+                                                <input id="fechaFinalFuenteConsumidor"
+                                                    class="datepicker form-control fechaFinal" type="text"
+                                                    placeholder="2017-12" />
                                             </div>
                                         </div>
                                         <div class="col-md-2 pl-1">
                                             <label>Reporte en Excel</label>
-                                            <button id="btnFuenteConsumidor" onclick="descargarReporteExcel(); return false;"
+                                            <button id="btnFuenteConsumidor"
+                                                onclick="descargarReporteFuenteConsumidor(); return false;"
+                                                class="btn btn-primary btn-round">
+                                                <i class="now-ui-icons arrows-1_cloud-download-93 "></i> Descargar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <h4 class="card-title">
+                                    <p class="category">Listado de Campos Consumidos</p>
+                                </h4>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-3 pl-1">
+                                            <div class="form-group">
+                                                <label>Fuente</label>
+                                                <input type="text" class="form-control" id="tagFuenteCampos"
+                                                    placeholder="Dirección Nacional de Registro de Datos Públicos">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 pl-1">
+                                            <div class="form-group">
+                                                <label>Consumidor</label>
+                                                <input type="text" class="form-control" id="tagConsumidoresCampos"
+                                                    placeholder="Dirección Nacional de Registro de Datos Públicos">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <div class="form-group">
+                                                <label>Fecha Inicial</label>
+                                                <input id="fechaInicialFuenteConsumidoresCampos"
+                                                    class="datepicker form-control fechaInicial" type="text"
+                                                    placeholder="2007-01" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <div class="form-group">
+                                                <label>Fecha Final</label>
+                                                <input id="fechaFinalFuenteConsumidoresCampos"
+                                                    class="datepicker form-control fechaFinal" type="text"
+                                                    placeholder="2017-12" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <label>Reporte en Excel</label>
+                                            <button id="btnFuenteConsumidoresCampos"
+                                                onclick="descargarReporteFuenteConsumidoresCampos(); return false;"
+                                                class="btn btn-primary btn-round">
+                                                <i class="now-ui-icons arrows-1_cloud-download-93 "></i> Descargar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="title">Reporte Consumidores Fuente</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-4 pl-1">
+                                            <div class="form-group">
+                                                <label>Consumidores</label>
+                                                <input type="text" class="form-control" id="tagConsumidores"
+                                                    placeholder="Dirección Nacional de Registro de Datos Públicos">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 pl-1">
+                                            <div class="form-group">
+                                                <label>Fecha Inicial</label>
+                                                <input id="fechaInicialConsumidorFuente"
+                                                    class="datepicker form-control fechaInicial" type="text"
+                                                    placeholder="2007-01" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 pl-1">
+                                            <div class="form-group">
+                                                <label>Fecha Final</label>
+                                                <input id="fechaFinalConsumidorFuente"
+                                                    class="datepicker form-control fechaFinal" type="text"
+                                                    placeholder="2017-12" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <label>Reporte en Excel</label>
+                                            <button id="btnConsumidorFuente"
+                                                onclick="descargarReporteConsumidorFuente(); return false;"
                                                 class="btn btn-primary btn-round">
                                                 <i class="now-ui-icons arrows-1_cloud-download-93 "></i> Descargar
                                             </button>
@@ -190,13 +287,26 @@
 <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
 
 <script src="controller/estadisticas.js"></script>
-<link href="assets/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
-<script src="assets/datepicker/js/jquery-1.10.2.js" type="text/javascript"></script>
-<script src="assets/datepicker/js/bootstrap.js" type="text/javascript"></script>
-<script src="assets/datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<!-- <link href="assets/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" /> -->
+<!-- <script src="assets/datepicker/js/jquery-1.10.2.js" type="text/javascript"></script> -->
+<!-- <script src="assets/datepicker/js/bootstrap.js" type="text/javascript"></script> -->
+<!-- <script src="assets/datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script> -->
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+<!-- <script src="https://cdn.rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script> -->
+
+<link href="assets/css/MonthPicker.min.css" rel="stylesheet" type="text/css" />
+<script src="assets/js/MonthPicker.min.js"></script>
+
+
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />    -->
 
 
 
