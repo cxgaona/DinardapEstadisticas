@@ -4,9 +4,14 @@ require_once '../model/Variables.php';
 
 if (isset($_POST['oper'])) {
 	switch ($_POST['oper']) {
-		case "consultaConsumoInteroperabilidad":
-			$sql = "SELECT mes,sum(consultas) as cantidad FROM consumo_interoperabilidad where anio=" . date("Y") . " group by mes";
-			$connection = Connection::getInstance("10.0.0.164", "christian", "dINAR.2019", "consumos_plataformas");
+		case "consultaConsumoInteroperabilidad":			
+			$sql = "SELECT			    
+			MONTH(CONS_FECHA) as mes,
+			SUM(CONS_CANTIDAD) as cantidad			
+			FROM consumos		 
+			WHERE YEAR(CONS_FECHA)= ".date("Y")."
+			GROUP BY mes;";			
+			$connection = Connection::getInstance(ServerEstadisticas, UserEstadisticas, PasswordEstadisticas, DatabaseEstadisticas);			
 			$result = $connection->getQuery($sql);
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($result)) {

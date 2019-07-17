@@ -2,15 +2,16 @@ var idFuenteSeleccionada, fuenteSeleccionada
 var idFuenteCamposSeleccionado
 var idConsumidorSeleccionado, consumidor
 
-
-
 $(document).ready(function () {
+  //botones deshabilitados
   $('#btnFuenteConsumidor').attr('disabled', true)
   $('#btnConsumidorFuente').attr('disabled', true)
   $('#btnFuenteConsumidoresCampos').attr('disabled', true)
-
+  $('#btnConsumidorFuentesCampos').attr('disabled', true)
+  //carga de fuentes y consumidores forms
   loadFuentes();
   loadConsumidores();
+  //fechas para forms
   var mesActual = new Date().getMonth()
   var añoActual = new Date().getFullYear()
   var mesAnterior, añoAnterior
@@ -22,7 +23,7 @@ $(document).ready(function () {
   } else {
     mesAnterior = mesActual + 1
   }
-
+  //monthpicker
   $('.datepicker').MonthPicker({
     Button: false,
     MaxMonth: -1,
@@ -68,27 +69,23 @@ function validacionTagFuenteConsumidoresCampos() {
   var flagConsumidor = false
   $.each(fuentes, function (index, value) {
     if (value['INSTITUCION FUENTE'] === fuenteCampoSeleccionado) {
-      idFuenteCamposSeleccionado = value['INSTITUCION FUENTE ID']
-      // $('#btnFuenteConsumidoresCampos').attr('disabled', false)
+      idFuenteCamposSeleccionado = value['INSTITUCION FUENTE ID']      
       flagFuente = true
       return false
     } else {
       idFuenteCamposSeleccionado = 'error'
-      flagFuente = false
-      // $('#btnFuenteConsumidoresCampos').attr('disabled', true)
+      flagFuente = false      
     }
   })
    consumidoresCampoSeleccionado = $('#tagConsumidoresCampos').val()
   $.each(consumidores, function (index, value) {
     if (value['INSTITUCION CONSUMIDORA'] === consumidoresCampoSeleccionado) {
-      idConsumidorCamposSeleccionado = value['INSTITUCION CONSUMIDORA ID']
-      // $('#btnFuenteConsumidoresCampos').attr('disabled', false)
+      idConsumidorCamposSeleccionado = value['INSTITUCION CONSUMIDORA ID']      
       flagConsumidor = true
       return false
     } else {
       idConsumidorCamposSeleccionado = 'error'
-      flagConsumidor = false
-      // $('#btnFuenteConsumidoresCampos').attr('disabled', true)
+      flagConsumidor = false      
     }
   })
 
@@ -96,6 +93,38 @@ function validacionTagFuenteConsumidoresCampos() {
     $('#btnFuenteConsumidoresCampos').attr('disabled', false)
   else
     $('#btnFuenteConsumidoresCampos').attr('disabled', true)
+
+}
+function validacionTagConsumidorFuentesCampos() {
+   fuenteCampoSeleccionado = $('#tagFuentesCampos').val()
+  var flagFuente = false
+  var flagConsumidor = false
+  $.each(fuentes, function (index, value) {
+    if (value['INSTITUCION FUENTE'] === fuenteCampoSeleccionado) {
+      idFuenteCamposSeleccionado = value['INSTITUCION FUENTE ID']      
+      flagFuente = true
+      return false
+    } else {
+      idFuenteCamposSeleccionado = 'error'
+      flagFuente = false      
+    }
+  })
+   consumidoresCampoSeleccionado = $('#tagConsumidorCampos').val()
+  $.each(consumidores, function (index, value) {
+    if (value['INSTITUCION CONSUMIDORA'] === consumidoresCampoSeleccionado) {
+      idConsumidorCamposSeleccionado = value['INSTITUCION CONSUMIDORA ID']      
+      flagConsumidor = true
+      return false
+    } else {
+      idConsumidorCamposSeleccionado = 'error'
+      flagConsumidor = false      
+    }
+  })
+
+  if (flagFuente && flagConsumidor)
+    $('#btnConsumidorFuentesCampos').attr('disabled', false)
+  else
+    $('#btnConsumidorFuentesCampos').attr('disabled', true)
 
 }
 
@@ -133,6 +162,15 @@ function loadFuentes() {
       validacionTagFuenteConsumidoresCampos()
     }
   })
+  $('#tagFuentesCampos').autocomplete({
+    source: tagFuentes,
+    open: function (event, ui) {
+      validacionTagConsumidorFuentesCampos()
+    },
+    close: function (event, ui) {
+      validacionTagConsumidorFuentesCampos()
+    }
+  })
 }
 function loadConsumidores() {
   var tagConsumidores = []
@@ -164,6 +202,15 @@ function loadConsumidores() {
     },
     close: function (event, ui) {
       validacionTagFuenteConsumidoresCampos()
+    }
+  })
+  $('#tagConsumidorCampos').autocomplete({
+    source: tagConsumidores,
+    open: function (event, ui) {
+      validacionTagConsumidorFuentesCampos()
+    },
+    close: function (event, ui) {
+      validacionTagConsumidorFuentesCampos()
     }
   })
 
@@ -261,9 +308,6 @@ function descargarReporteFuenteConsumidor() {
   })
 }
 function descargarReporteFuenteConsumidoresCampos() {
-
-
-
   var fechaInicial = $('#fechaInicialFuenteConsumidoresCampos').val() + '-01'
   var fechaFinal = $('#fechaFinalFuenteConsumidoresCampos').val() + '-31'
   var datos;
@@ -443,6 +487,100 @@ function descargarReporteConsumidorFuente() {
         XLSX.writeFile(wb, 'ReporteConsumido Fuentes ' + fechaInicial + ' a ' + fechaFinal + '.xlsx');
       } else {
         alert("No existen datos para el Consumidor y Fechas Seleccionadas");
+      }
+    },
+    type: 'POST'
+  })
+}
+function descargarReporteConsumidorFuentesCampos() {
+  var fechaInicial = $('#fechaInicialConsumidorFuentesCampos').val() + '-01'
+  var fechaFinal = $('#fechaFinalConsumidorFuentesCampos').val() + '-31'
+  var datos;
+
+  $.ajax({
+    async: false,
+    data: {
+      oper: 'cargaInfoFuenteConsumidoresCampos',
+      fechaInicio: fechaInicial,
+      fechaFin: fechaFinal,
+      fuente: idFuenteCamposSeleccionado,
+      consumidor: idConsumidorCamposSeleccionado
+    },
+    url: "controller/obtenerDatos.php",
+    success: function (data) {
+      if (data != "0") {
+        datos = JSON.parse(data)
+        var wb = XLSX.utils.book_new();
+        wb.Props = {
+          Title: "Reporte de Campos Consumidos",
+          Subject: "",
+          Author: "DINARDAP",
+          CreatedDate: new Date()
+        };
+        wb.SheetNames.push("Reporte de Campos Consumidos");
+        //carga de datos obtenidos de la base
+        var ws = XLSX.utils.json_to_sheet(datos, { origin: "A7" });
+        //agrega titulos de la plantilla  
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0! 
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+          dd = '0' + dd
+        }
+        if (mm < 10) {
+          mm = '0' + mm
+        }
+        var today = yyyy + '/' + mm + '/' + dd;
+
+        XLSX.utils.sheet_add_json(ws, [
+          { A: 'LISTADO DE CAMPOS CONSUMIDOS' },          
+          { A: 'CONSUMIDOR: ' + consumidoresCampoSeleccionado },
+          { A: 'FUENTE: ' + fuenteCampoSeleccionado },
+          { A: 'FECHA: ' + today },
+          { A: '**Matriz de Número de Consultas por Mes**' }
+        ], { skipHeader: true });
+        //combina las celdas de los titulos
+        ws['!merges'] = [XLSX.utils.decode_range("A1:O1"),
+        XLSX.utils.decode_range("A2:O2"),
+        XLSX.utils.decode_range("A3:O3"),
+        XLSX.utils.decode_range("A4:O4")]
+        //obtiene el numero de filas y columnas
+        var range = XLSX.utils.decode_range(ws['!ref']);
+        var noRows = range.e.r; //No.of rows
+        var noCols = range.e.c; //No. of cols
+        var rowMax = noRows + 2;
+        //agrega total columna final
+        XLSX.utils.sheet_add_json(ws, [
+          { A: 'TOTAL' }
+        ], { skipHeader: true, origin: "O7" });
+        for (var i = 8; i <= rowMax; i++) {
+          XLSX.utils.sheet_set_array_formula(ws, 'O' + i + ':O' + i, 'SUM(C' + i + ':N' + i + ')');
+        }
+        //agrega total fila final
+        XLSX.utils.sheet_add_json(ws, [
+          { A: 'TOTAL' }
+        ], { skipHeader: true, origin: "A" + rowMax });
+        for (var i = 2; i <= noCols; i++) {
+          var cell_address = { c: i, r: rowMax - 1 };
+          var cell_ref = XLSX.utils.encode_cell(cell_address);
+          celda = cell_ref.split(rowMax);
+          XLSX.utils.sheet_set_array_formula(ws, cell_ref + ':' + cell_ref, 'SUM(' + celda[0] + '8:' + celda[0] + (rowMax - 1) + ')');
+        }
+        var wscols = [
+          { wch: 45 },
+          { wch: 4.5 },
+          { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 },
+          { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 }, { wch: 7.75 },
+          { wch: 8 },
+        ];
+        ws['!cols'] = wscols;
+        //caracteristicas para la exportacion a excel       
+        wb.Sheets["Reporte de Campos Consumidos"] = ws;
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+        XLSX.writeFile(wb, 'ReporteCamposConsumidos ' + fechaInicial + ' a ' + fechaFinal + '.xlsx');
+      } else {
+        alert("No existen datos para el Consumidor, Fuente y Fechas Seleccionadas");
       }
     },
     type: 'POST'

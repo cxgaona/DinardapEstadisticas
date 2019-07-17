@@ -222,14 +222,17 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="title">Reporte Consumidores Fuente</h5>
+                                <h5 class="title">Reporte Consumidor Fuentes</h5>
                             </div>
                             <div class="card-body">
+                                <h4 class="card-title">
+                                    <p class="category">Listado de Instituciones Fuente</p>
+                                </h4>
                                 <form>
                                     <div class="row">
                                         <div class="col-md-4 pl-1">
                                             <div class="form-group">
-                                                <label>Consumidores</label>
+                                                <label>Consumidor</label>
                                                 <input type="text" class="form-control" id="tagConsumidores"
                                                     placeholder="Dirección Nacional de Registro de Datos Públicos">
                                             </div>
@@ -254,6 +257,51 @@
                                             <label>Reporte en Excel</label>
                                             <button id="btnConsumidorFuente"
                                                 onclick="descargarReporteConsumidorFuente(); return false;"
+                                                class="btn btn-primary btn-round">
+                                                <i class="now-ui-icons arrows-1_cloud-download-93 "></i> Descargar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <h4 class="card-title">
+                                    <p class="category">Listado de Campos Consumidos</p>
+                                </h4>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-3 pl-1">
+                                            <div class="form-group">
+                                                <label>Consumidor</label>
+                                                <input type="text" class="form-control" id="tagConsumidorCampos"
+                                                    placeholder="Dirección Nacional de Registro de Datos Públicos">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 pl-1">
+                                            <div class="form-group">
+                                                <label>Fuente</label>
+                                                <input type="text" class="form-control" id="tagFuentesCampos"
+                                                    placeholder="Dirección Nacional de Registro de Datos Públicos">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <div class="form-group">
+                                                <label>Fecha Inicial</label>
+                                                <input id="fechaInicialConsumidorFuentesCampos"
+                                                    class="datepicker form-control fechaInicial" type="text"
+                                                    placeholder="2007-01" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <div class="form-group">
+                                                <label>Fecha Final</label>
+                                                <input id="fechaFinalConsumidorFuentesCampos"
+                                                    class="datepicker form-control fechaFinal" type="text"
+                                                    placeholder="2017-12" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pl-1">
+                                            <label>Reporte en Excel</label>
+                                            <button id="btnConsumidorFuentesCampos"
+                                                onclick="descargarReporteConsumidorFuentesCampos(); return false;"
                                                 class="btn btn-primary btn-round">
                                                 <i class="now-ui-icons arrows-1_cloud-download-93 "></i> Descargar
                                             </button>
