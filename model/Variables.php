@@ -16,9 +16,9 @@ define("PasswordFicha", "sERVIDOR.20");
 define("DatabaseFicha", "fichadb");
 define("PuertoFicha", "5432");
 //Estadisticas
-define("ServerEstadisticas", "10.0.0.106");
-define("UserEstadisticas", "cristian.remache");
-define("PasswordEstadisticas", "");
-define("DatabaseEstadisticas", "consumo");
+define("ServerEstadisticas", "10.0.0.168");
+define("UserEstadisticas", "estadisticas");
+define("PasswordEstadisticas", "estadisticas.2019");
+define("DatabaseEstadisticas", "consumointeroperabilidad");
 
 ?>
